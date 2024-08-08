@@ -2,7 +2,7 @@ body {
   margin: 0;
   height: 100vh;
   width: 100vw;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 #root {
@@ -19,21 +19,25 @@ body {
 }
 
 .Form-container {
-  height: 80%;
+  height: auto;
   width: 40%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   background-color: rgba(146, 146, 146, 0.082);
   border-style: solid;
   border-width: 1px;
   border-radius: 5px;
   border-color: rgba(128, 128, 128, 0.349);
+  padding-top: 100px;
+  padding-bottom: 100px;
+  padding: 0;
 }
 
 .upper_part {
   height: 25%;
+  height: auto;
   width: 100%;
 }
 
@@ -45,30 +49,34 @@ h1 {
   margin-bottom: 0;
   font-weight: 100;
   height: 100%;
+  height: auto;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center; 
   text-decoration: underline;
+  height: 100px;
 }
 
 
-.login_form {
+.login_form, .Sign-up-form {
   height: 55%;
+  height: auto;
   width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
 }
 
-.login_form > div {
+.login_form > div, .Sign-up-form > div {
   height: auto;
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 25px;
 }
 
 .indicator {
@@ -117,6 +125,7 @@ button:hover {
 
 .lower_part {
   height: 20%;
+  height: auto;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -124,8 +133,68 @@ button:hover {
 
 .lower_part > p {
   font-size: 12px;
-  margin-top: 10px;
-  margin-bottom: 0;
+  margin-top: 20px;
+  margin-bottom: 20px;
   font-family: sans-serif;
   text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.Sign-up-form {
+  background-color: rgba(0, 128, 0, 0);
 }

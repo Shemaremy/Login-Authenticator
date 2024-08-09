@@ -16,13 +16,13 @@ function App() {
       <div className='one'>
         <p className='indicator'>Email</p>
         <div className='input_container'>
-          <input type="text" />
+          <input type="text" placeholder='Enter your username or email' name='Name'/>
         </div>
       </div>
       <div className='two'>
         <p className='indicator'>Password</p>
         <div className='input_container'>
-          <input type="text" />
+          <input type="text" placeholder='Enter your password' name='Email'/>
         </div>
       </div>
       <div className='three'>

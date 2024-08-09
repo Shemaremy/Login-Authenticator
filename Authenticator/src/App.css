@@ -33,6 +33,7 @@ body {
   padding-top: 100px;
   padding-bottom: 100px;
   padding: 0;
+  transition: padding 0.3s ease-in-out;
 }
 
 .upper_part {
@@ -106,6 +107,9 @@ h1 {
   background-color: rgba(255, 0, 0, 0);
 }
 
+::placeholder {
+  font-size: 12px;
+}
 
 button {
   border-style: solid;

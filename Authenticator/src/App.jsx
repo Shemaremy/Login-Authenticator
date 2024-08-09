@@ -18,7 +18,7 @@ function App() {
   const [UserName, setUserName] = useState('');
   const [Email, setEmail] = useState('');
 
-  const [passwordOne, setPasswordOne] = useState('');
+  const [password, setPasswordOne] = useState('');
   const [passwordTwo, setPasswordTwo] = useState('');
 
 
@@ -51,7 +51,7 @@ function App() {
     const BorderOne = document.querySelector('.rimwe');
     const BorderTwo = document.querySelector('.kabiri');
 
-    if(passwordOne !== passwordTwo) {
+    if(password !== passwordTwo) {
       newErrors.passwordTwo = 'Your passwords must match sir!';
       BorderOne.style.borderColor = 'red';
       BorderTwo.style.borderColor = 'red';
@@ -75,13 +75,13 @@ function App() {
         BorderOne.style.borderColor = '';
         BorderTwo.style.borderColor = '';
 
-        console.log('Form Data:', { UserName, Email, passwordOne });
+        console.log('Form Data:', { UserName, Email, password });
         fetch('http://localhost:5000/api/users', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ UserName, Email, passwordOne })
+          body: JSON.stringify({ UserName, Email, password })
         })
         .then(response => response.json())
         .then(data => {
@@ -188,7 +188,7 @@ function App() {
             placeholder='Enter password' 
             name='FirstPassword'
             maxLength={20}
-            value={passwordOne}
+            value={password}
             onChange={(e) => setPasswordOne(e.target.value)}
             required
           />

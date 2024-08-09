@@ -14,6 +14,10 @@ function App() {
   const [showPasswordOne, setShowPasswordOne] = useState(false);
   const [showPasswordTwo, setShowPasswordTwo] = useState(false);
 
+
+  const [UserName, setUserName] = useState('');
+  const [Email, setEmail] = useState('');
+
   const [passwordOne, setPasswordOne] = useState('');
   const [passwordTwo, setPasswordTwo] = useState('');
 
@@ -70,11 +74,31 @@ function App() {
         setErrors({});
         BorderOne.style.borderColor = '';
         BorderTwo.style.borderColor = '';
-        alert('Success');
+
+        console.log('Form Data:', { UserName, Email, passwordOne });
+        fetch('http://localhost:5000/api/users', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ UserName, Email, passwordOne })
+        })
+        .then(response => response.json())
+        .then(data => {
+          alert('Success:', data);
+          console.log('Success:', data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          alert('Error:', error);
+        });
     }
+
+
+
   }
 
-
+/*
   const handlePasswordOneChange = (e) => {
     const value = e.target.value;
     setPasswordOne(value);
@@ -84,7 +108,7 @@ function App() {
     const value = e.target.value;
     setPasswordTwo(value);
   }
-
+*/
 
 
 
@@ -132,13 +156,15 @@ function App() {
   );
 
   const SignUpForm = (
-    <form action="" className='Sign-up-form' onSubmit={handleSignUpSubmit}>
+    <form className='Sign-up-form' onSubmit={handleSignUpSubmit}>
       <div className='one'>
         <p className='indicator'>Username</p>
         <div className='input_container'>
           <input type="text" 
             placeholder='Enter a preferred username' 
             name='Name'
+            value={UserName}
+            onChange={(e) => setUserName(e.target.value)}
             required
           />
         </div>
@@ -149,6 +175,8 @@ function App() {
           <input type="text" 
             placeholder='Enter your email address' 
             name='Email'
+            value={Email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
@@ -161,7 +189,7 @@ function App() {
             name='FirstPassword'
             maxLength={20}
             value={passwordOne}
-            onChange={handlePasswordOneChange}
+            onChange={(e) => setPasswordOne(e.target.value)}
             required
           />
           <div className='eye-container' type="button" onClick={handleHidePasswordOne}>
@@ -177,7 +205,7 @@ function App() {
             name='ConfPassword'
             maxLength={20}
             value={passwordTwo}
-            onChange={handlePasswordTwoChange}
+            onChange={(e) => setPasswordTwo(e.target.value)}
             required
           />
           <div className='eye-container' type="button" onClick={handleHidePasswordTwo}>

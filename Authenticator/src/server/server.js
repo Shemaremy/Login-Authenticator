@@ -17,15 +17,16 @@ mongoose.connect('mongodb://localhost:27017/Test')
 
 
 const UserSchema = new mongoose.Schema({
-  UserName: String,
-  Email: String,       
-  password: String, 
+  UserName: { type: String, unique: true, required: true },
+  Email: { type: String, unique: true, required: true },
+  password: { type: String, required: true },
 });
 
 
 
-
 const User = mongoose.model('Users', UserSchema);
+
+
 
 
 app.post('/api/Users', (req, res) => {

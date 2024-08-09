@@ -75,7 +75,6 @@ function App() {
         BorderOne.style.borderColor = '';
         BorderTwo.style.borderColor = '';
 
-        console.log('Form Data:', { UserName, Email, password });
         fetch('http://localhost:5000/api/users', {
           method: 'POST',
           headers: {
@@ -87,6 +86,7 @@ function App() {
         .then(data => {
           alert('Success:', data);
           console.log('Success:', data);
+          window.location.reload();
         })
         .catch((error) => {
           console.error('Error:', error);

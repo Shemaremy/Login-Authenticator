@@ -11,7 +11,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 
-mongoose.connect('mongodb://localhost:27017/Test', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://localhost:27017/Test')
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
@@ -31,7 +31,6 @@ const User = mongoose.model('Users', UserSchema);
 app.post('/api/Users', (req, res) => {
   const { UserName, Email, password } = req.body;
 
-  console.log('Password before saving:', password);
   const newUser = new User({ UserName, Email, password });
 
   newUser.save()

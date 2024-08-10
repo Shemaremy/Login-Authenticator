@@ -62,10 +62,10 @@ function App() {
 
 
   const handleCreateUser = () => {
-
     const UsernameBorder = document.querySelector('.gatatu');
     const EmailBorder = document.querySelector('.kane');
 
+    
     fetch('http://localhost:5000/api/users', {
       method: 'POST',
       headers: {
@@ -75,28 +75,25 @@ function App() {
     })
 
 
-    .then(response => response.json()
-    .then(data => {
+    .then(response => response.json().then(data => {
       if (response.ok) {
         UsernameBorder.style.borderColor = '';
         EmailBorder.style.borderColor = '';
         alert('Success: User registered successfully');
         console.log('Success:', data);
-        //window.location.reload();
+        window.location.reload();
       } else {
-        alert("Sth wrong")
-        const UsernameDup = "Error: MongoServerError: E11000 duplicate key error collection: Test.users index: UserName_1 dup key: { UserName: \"Shemaremy\" }";
-        const EmailDup = "Error: MongoServerError: E11000 duplicate key error collection: Test.users index: Email_1 dup key: { Email: \"remyshema20@gmail.com\" }";
-        if (UsernameDup === data) {
-          UsernameBorder.style.borderColor = 'red';
+        const errorMessage = data.message;
+        if (errorMessage.includes("UserName")) {
           alert("Username already exists")
+          UsernameBorder.style.borderColor = 'red';
         }
-        else if (EmailDup === data) {
-          alert("Email already exists");
+        else if (errorMessage.includes("Email")) {
+          alert("Email already exists")
+          UsernameBorder.style.borderColor = '';
           EmailBorder.style.borderColor = 'red';
-          UsernameBorder.style.borderColor = '';          
         }
-        console.error('Error:', data);
+        console.error(errorMessage);
       }
     }))
 
@@ -104,8 +101,7 @@ function App() {
     .catch((error) => {
       console.error('Error:', error);
       alert('Error: Something went wrong. Please try again.');
-    });
-  
+    });  
   }
 
   
@@ -117,17 +113,15 @@ function App() {
     const BorderTwo = document.querySelector('.kabiri');
     if (Object.keys(newErrors).length > 0) {
         setErrors(newErrors);
-    } else {
-        // navigate('/');
-        // window.location.reload();
-        setErrors({});
-        BorderOne.style.borderColor = '';
-        BorderTwo.style.borderColor = '';
-        handleCreateUser();
+    } 
+    else {
+      // navigate('/');
+      // window.location.reload();
+      setErrors({});
+      BorderOne.style.borderColor = '';
+      BorderTwo.style.borderColor = '';
+      handleCreateUser();  
     }
-
-
-
   }
 
 

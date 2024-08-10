@@ -61,6 +61,55 @@ function App() {
   };
 
 
+  const handleCreateUser = () => {
+
+    const UsernameBorder = document.querySelector('.gatatu');
+    const EmailBorder = document.querySelector('.kane');
+
+    fetch('http://localhost:5000/api/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ UserName, Email, password })
+    })
+
+
+    .then(response => response.json()
+    .then(data => {
+      if (response.ok) {
+        UsernameBorder.style.borderColor = '';
+        EmailBorder.style.borderColor = '';
+        alert('Success: User registered successfully');
+        console.log('Success:', data);
+        //window.location.reload();
+      } else {
+        alert("Sth wrong")
+        const UsernameDup = "Error: MongoServerError: E11000 duplicate key error collection: Test.users index: UserName_1 dup key: { UserName: \"Shemaremy\" }";
+        const EmailDup = "Error: MongoServerError: E11000 duplicate key error collection: Test.users index: Email_1 dup key: { Email: \"remyshema20@gmail.com\" }";
+        if (UsernameDup === data) {
+          UsernameBorder.style.borderColor = 'red';
+          alert("Username already exists")
+        }
+        else if (EmailDup === data) {
+          alert("Email already exists");
+          EmailBorder.style.borderColor = 'red';
+          UsernameBorder.style.borderColor = '';          
+        }
+        console.error('Error:', data);
+      }
+    }))
+
+
+    .catch((error) => {
+      console.error('Error:', error);
+      alert('Error: Something went wrong. Please try again.');
+    });
+  
+  }
+
+  
+  
   const handleSignUpSubmit = (e) => {
     e.preventDefault();
     const newErrors = validateForm();
@@ -74,35 +123,7 @@ function App() {
         setErrors({});
         BorderOne.style.borderColor = '';
         BorderTwo.style.borderColor = '';
-
-        fetch('http://localhost:5000/api/users', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ UserName, Email, password })
-        })
-        .then(response => response.json()
-        .then(data => {
-          if (response.ok) {
-            alert('Success: User registered successfully');
-            console.log('Success:', data);
-          } else {
-            const UsernameDup = "Error: MongoServerError: E11000 duplicate key error collection: Test.users index: UserName_1 dup key: { UserName: \"Shemaremy\" }";
-            const EmailDup = "Error: MongoServerError: E11000 duplicate key error collection: Test.users index: Email_1 dup key: { Email: \"remyshema20@gmail.com\" }";
-            if (UsernameDup === data) {
-              alert("Username")
-            }
-            else if (EmailDup === data) {
-              alert("Email");
-            }
-            console.error('Error:', data);
-          }
-        }))
-        .catch((error) => {
-          console.error('Error:', error);
-          alert('Error: Something went wrong. Please try again.');
-        });
+        handleCreateUser();
     }
 
 
@@ -159,7 +180,7 @@ function App() {
     <form className='Sign-up-form' onSubmit={handleSignUpSubmit}>
       <div className='one'>
         <p className='indicator'>Username</p>
-        <div className='input_container'>
+        <div className='input_container gatatu'>
           <input type="text" 
             placeholder='Enter a preferred username' 
             name='Name'
@@ -171,7 +192,7 @@ function App() {
       </div>
       <div className='two'>
         <p className='indicator'>Email</p>
-        <div className='input_container'>
+        <div className='input_container kane'>
           <input type="text" 
             placeholder='Enter your email address' 
             name='Email'

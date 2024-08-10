@@ -82,15 +82,26 @@ function App() {
           },
           body: JSON.stringify({ UserName, Email, password })
         })
-        .then(response => response.json())
+        .then(response => response.json()
         .then(data => {
-          alert('Success:', data);
-          console.log('Success:', data);
-          //window.location.reload();
-        })
+          if (response.ok) {
+            alert('Success: User registered successfully');
+            console.log('Success:', data);
+          } else {
+            const UsernameDup = "Error: MongoServerError: E11000 duplicate key error collection: Test.users index: UserName_1 dup key: { UserName: \"Shemaremy\" }";
+            const EmailDup = "Error: MongoServerError: E11000 duplicate key error collection: Test.users index: Email_1 dup key: { Email: \"remyshema20@gmail.com\" }";
+            if (UsernameDup === data) {
+              alert("Username")
+            }
+            else if (EmailDup === data) {
+              alert("Email");
+            }
+            console.error('Error:', data);
+          }
+        }))
         .catch((error) => {
           console.error('Error:', error);
-          alert('Error:', error);
+          alert('Error: Something went wrong. Please try again.');
         });
     }
 
@@ -98,17 +109,6 @@ function App() {
 
   }
 
-/*
-  const handlePasswordOneChange = (e) => {
-    const value = e.target.value;
-    setPasswordOne(value);
-  }
-
-  const handlePasswordTwoChange = (e) => {
-    const value = e.target.value;
-    setPasswordTwo(value);
-  }
-*/
 
 
 

@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const uniqueValidator = require('mongoose-unique-validator');
 
 const app = express();
 const port = 5000;
@@ -24,6 +25,10 @@ const UserSchema = new mongoose.Schema({
 
 
 
+
+
+
+UserSchema.plugin(uniqueValidator, { message: 'Email is used already.' });
 const User = mongoose.model('Users', UserSchema);
 
 
@@ -36,8 +41,32 @@ app.post('/api/Users', (req, res) => {
 
   newUser.save()
     .then(user => res.json(user))
-    .catch(err => res.status(400).json('Error: ' + err));
+    .catch(err => {
+      if (err.code === 11000) {
+        const field = Object.keys(err.keyValue)[0];
+        const value = err.keyValue[field];
+        const errorMessage = `The ${field} "${value}" already exists.`;
+        console.error('Error:', errorMessage);
+        res.status(400).json({ message: errorMessage });
+      } 
+      
+      else {
+        console.error('Error: ', err);
+        res.status(400).json({ message: 'An unexpected error occurred. Please try again.' });
+      }
+    });
 });
+
+
+
+
+
+
+
+
+
+
+
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

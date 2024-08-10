@@ -43,16 +43,11 @@ app.post('/api/Users', (req, res) => {
     .then(user => res.json(user))
     .catch(err => {
       if (err.code === 11000) {
-        const field = Object.keys(err.keyValue)[0];
-        const value = err.keyValue[field];
-        const errorMessage = `The ${field} "${value}" already exists.`;
-        console.error('Error:', errorMessage);
-        res.status(400).json({ message: errorMessage });
+        res.status(400).json("Email or Username has been already used");
       } 
       
       else {
-        console.error('Error: ', err);
-        res.status(400).json({ message: 'An unexpected error occurred. Please try again.' });
+        res.status(400).json('An unexpected error occurred. Please try again.');
       }
     });
 });

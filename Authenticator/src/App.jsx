@@ -130,7 +130,6 @@ function App() {
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    //console.log('Password:', loginPassword);
 
   
     fetch('http://localhost:5000/api/login', {
@@ -144,7 +143,7 @@ function App() {
       if (response.ok) {
         alert('Success: Login successful');
         console.log('Success:', data);
-        // Redirect or take any action after successful login
+        window.location.reload();
       } else {
         alert(`Error: ${data.message}`);
         console.error('Login failed:', data.message);

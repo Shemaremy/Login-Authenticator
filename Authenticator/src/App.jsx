@@ -22,6 +22,9 @@ function App() {
   const [passwordTwo, setPasswordTwo] = useState('');
 
 
+  const [loginIdentifier, setLoginIdentifier] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+
 
 
   const handleFormChange = () => {
@@ -125,6 +128,34 @@ function App() {
   }
 
 
+  const handleLoginSubmit = (e) => {
+    e.preventDefault();
+    //console.log('Password:', loginPassword);
+
+  
+    fetch('http://localhost:5000/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ identifier: loginIdentifier, password: loginPassword })
+    })
+    .then(response => response.json().then(data => {
+      if (response.ok) {
+        alert('Success: Login successful');
+        console.log('Success:', data);
+        // Redirect or take any action after successful login
+      } else {
+        alert(`Error: ${data.message}`);
+        console.error('Login failed:', data.message);
+      }
+    }))
+    .catch((error) => {
+      console.error('Error:', error);
+      alert('Error: Something went wrong. Please try again.');
+    });
+  };
+  
 
 
 
@@ -138,13 +169,15 @@ function App() {
 
 
   const LoginForm = (
-    <form action="" className='login_form'>
+    <form action="" className='login_form' onSubmit={handleLoginSubmit}>
       <div className='one'>
         <p className='indicator'>Email / Username</p>
         <div className='input_container'>
           <input type="text" 
             placeholder='Enter your username or email' 
             name='Email'
+            value={loginIdentifier}
+            onChange={(e) => setLoginIdentifier(e.target.value)}
             maxLength={25}
             required
           />
@@ -156,6 +189,8 @@ function App() {
           <input type={showPassword ? "text" : "password"} 
             placeholder='Enter your password' 
             name='Password'
+            value={loginPassword}
+            onChange={(e) => setLoginPassword(e.target.value)}
             maxLength={20}
             required
           />

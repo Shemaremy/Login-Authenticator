@@ -9,8 +9,9 @@
 - npm install --save mongoose-unique-validator
 
 
+# USAAGE:
 
-# Run your Server side js file
+## Run your Server side js file
 
 - Make sure your compass is open and running, plus active connection with a point
 - Make sure your nodejs server file is running

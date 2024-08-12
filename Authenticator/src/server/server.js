@@ -92,10 +92,8 @@ app.post('/api/login', async (req, res) => {
     console.log(isMatch);
 
     if (isMatch) {
-      // Passwords match, successful login
       return res.status(200).json({ message: 'Success' });
     } else {
-      // Passwords do not match
       return res.status(400).json({ message: 'Invalid password' });
     }
   } catch (err) {

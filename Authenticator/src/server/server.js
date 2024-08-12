@@ -86,9 +86,9 @@ app.post('/api/login', async (req, res) => {
       return res.status(400).json({ message: `There is no user with ${identifier}` });
     }
 
-    // Compare the provided password with the stored hashed password
-    //const isMatch = await bcrypt.compare(password, user.password);
-    const isMatch = password === user.password;
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    //const isMatch = password === user.password;
     console.log(isMatch);
 
     if (isMatch) {

@@ -42,7 +42,7 @@ body {
   width: 100%;
 }
 
-h1 {
+.upper_part {
   font-family: sans-serif;
   font-family: monospace;
   color: rgba(0, 0, 0, 0.63);
@@ -155,7 +155,7 @@ h1 {
 }
 
 
-button {
+.account_button {
   border-style: solid;
   border-radius: 5px;
   border-width: 0;
@@ -167,7 +167,7 @@ button {
   transition: background-color 0.3s ease-in-out;
 }
 
-button:hover {
+.account_button:hover {
   background-color: rgba(0, 0, 0, 0.76);
 }
 
@@ -194,60 +194,109 @@ button:hover {
   align-items: center;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .Sign-up-form {
   background-color: rgba(0, 128, 0, 0);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*------------------------------- RESPONSIVENESS -----------------------------------*/
+/*------------------------------- RESPONSIVENESS -----------------------------------*/
+/*------------------------------- RESPONSIVENESS -----------------------------------*/
+/*------------------------------- RESPONSIVENESS -----------------------------------*/
+/*------------------------------- RESPONSIVENESS -----------------------------------*/
+/*------------------------------- RESPONSIVENESS -----------------------------------*/
+/*------------------------------- RESPONSIVENESS -----------------------------------*/
+/*------------------------------- RESPONSIVENESS -----------------------------------*/
+
+
+
+
+
+
+
+/*------------------------------- My Phone -----------------------------------*/
+
+@media (max-width: 768px) {
+  .Form-container {
+    width: 98%;
+    border-width: 0;
+    background-color: rgba(255, 255, 255, 0);
+  }
+
+  .upper_part {
+    height: 100px;
+    color: gray;
+  }
+
+  .indicator {
+    width: 90%;
+  }
+
+  .input_container {
+    width: 90%;
+    height: 60px;
+  }
+
+  .account_button {
+    width: 90%;
+    height: 50px;
+  }
+
+  .lower_part {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+}
+
+
+
+
+
+
+@media (max-width: 1220px) {
+  .Form-container {
+    width: 90%;
+    border-width: 1;
+    background-color: rgba(255, 255, 255, 0);
+  }
+
+  .upper_part {
+    height: 100px;
+    color: rgba(128, 128, 128, 0.76);
+  }
+
+  .indicator {
+    width: 90%;
+  }
+
+  .input_container {
+    width: 90%;
+    height: 60px;
+  }
+
+  .account_button {
+    width: 90%;
+    height: 50px;
+  }
+
+  .lower_part {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
 }

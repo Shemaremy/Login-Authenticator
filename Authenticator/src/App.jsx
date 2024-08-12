@@ -199,7 +199,7 @@ function App() {
         </div>
       </div>
       <div className='three'>
-        <button>Sign in</button>
+        <button className='account_button' type='submit'>Sign in</button>
       </div>
     </form>
   );
@@ -264,7 +264,7 @@ function App() {
         {errors.passwordTwo && <p className='error'>{errors.passwordTwo}</p>}
       </div>
       <div className='three'>
-        <button type='submit'>Sign up</button>
+        <button className='account_button' type='submit'>Sign up</button>
       </div>
     </form>
   );
@@ -276,7 +276,7 @@ function App() {
     <div className="App">
       <div className='Form-container'>
         <div className='upper_part'>
-          <h1>{isLogin ? 'Login' : 'Sign up'}</h1>
+          <h1 className='upper_part'>{isLogin ? 'Login' : 'Sign up'}</h1>
         </div>
         {isLogin ? LoginForm : SignUpForm}
         <div className='lower_part'>

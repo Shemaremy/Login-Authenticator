@@ -62,7 +62,7 @@ app.post('/api/users', (req, res) => {
       res.status(400).json({ message: messages.join(', ') });
     } 
     else {
-      res.status(500).json({ message: 'Im the error in serverside' });
+      res.status(500).json({ message: 'Something went wrong, please try again later.' });
     }
   });
 
@@ -83,12 +83,14 @@ app.post('/api/login', async (req, res) => {
     });
 
     if (!user) {
-      return res.status(400).json({ message: `There is no user with ${identifier}` });
+      return res.status(400).json({ message: `There is no account with username or email: ${identifier}` });
     }
 
 
 
-    const isMatch = bcrypt.compare(password, user.password);
+    //const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = password === user.password;
+
 
     if (isMatch) {
       return res.status(200).json({ message: 'Success' });

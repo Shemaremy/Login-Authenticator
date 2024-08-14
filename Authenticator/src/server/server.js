@@ -4,14 +4,16 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const uniqueValidator = require('mongoose-unique-validator');
 
-const bcrypt = require('bcryptjs'); // For hashing and comparing passwords
+const bcrypt = require('bcrypt'); // For hashing and comparing passwords
+const saltRounds = 10;
 
 const app = express();
-const port = 5000;
+const PORT = 5000;
 
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.json());
 
 
 mongoose.connect('mongodb://localhost:27017/Test')
@@ -30,7 +32,7 @@ const UserSchema = new mongoose.Schema({
 
 
 
-UserSchema.plugin(uniqueValidator, { message: '{PATH} with value `{VALUE}` already exists.' });
+UserSchema.plugin(uniqueValidator);
 const User = mongoose.model('Users', UserSchema);
 
 
@@ -46,27 +48,26 @@ const User = mongoose.model('Users', UserSchema);
 
 
 // SIGNUP route
-app.post('/api/users', (req, res) => {
+app.post('/api/users', async (req, res) => {
   const { UserName, Email, password } = req.body;
 
-  const newUser = new User({ UserName, Email, password });
+  try {
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const newUser = new User({ UserName, Email, password: hashedPassword });
 
-
-  newUser.save().then(user => res.json(user))
-  .catch(err => {
+    const user = await newUser.save();
+    res.json(user);
+  } catch (err) {
     console.error('Error:', err);
-    
+
     if (err.name === 'ValidationError') {
       const errors = err.errors;
       const messages = Object.values(errors).map(e => e.message);
       res.status(400).json({ message: messages.join(', ') });
-    } 
-    else {
+    } else {
       res.status(500).json({ message: 'Something went wrong, please try again later.' });
     }
-  });
-
-
+  }
 });
 
 
@@ -78,29 +79,30 @@ app.post('/api/login', async (req, res) => {
 
   try {
 
-    const user = await User.findOne({
-      $or: [{ UserName: identifier }, { Email: identifier }]
-    });
-
+    const user = await User.findOne({ $or: [{ UserName: identifier }, { Email: identifier }]});
     if (!user) {
-      return res.status(400).json({ message: `There is no account with username or email: ${identifier}` });
+      res.status(400).send({ message: `There is no account with username or email: ${identifier}` });
+    } 
+    else {
+      const isMatch = await bcrypt.compare(password, user.password);
+      //const isMatch = password === user.password;
+      if (isMatch) {
+        res.status(200).send({ message: 'Success' });
+      } else {
+        res.status(400).send({ message: `${isMatch}` });
+      }
+
     }
 
-
-
-    //const isMatch = await bcrypt.compare(password, user.password);
-    const isMatch = password === user.password;
-
-
-    if (isMatch) {
-      return res.status(200).json({ message: 'Success' });
-    } else {
-      return res.status(400).json({ message: 'Invalid password' });
-    }
-  } catch (err) {
+  } 
+  
+  
+  catch (err) {
     console.error('Error:', err);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).send({ message: 'Server error' });
   }
+
+
 });
 
 
@@ -111,8 +113,8 @@ app.post('/api/login', async (req, res) => {
 
 
 
-app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });
 
 

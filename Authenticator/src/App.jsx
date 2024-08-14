@@ -143,7 +143,7 @@ function App() {
       if (response.ok) {
         alert('Success: Login successful');
         console.log('Success:', data);
-        window.location.reload();
+        //window.location.reload();
       } else {
         alert(`Error: ${data.message}`);
         console.error('Login failed:', data.message);

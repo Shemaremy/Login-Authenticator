@@ -8,8 +8,6 @@ function App() {
 
   const [errors, setErrors] = useState({});
 
-  const [isLogin, setIsLogin] = useState(true);
-
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordOne, setShowPasswordOne] = useState(false);
   const [showPasswordTwo, setShowPasswordTwo] = useState(false);
@@ -27,9 +25,42 @@ function App() {
 
 
 
-  const handleFormChange = () => {
-    setIsLogin(!isLogin);
+
+
+
+
+
+
+
+
+
+
+
+  const FORM_STATE = {
+    LOGIN: 'login',
+    SIGNUP: 'signup',
+    FORGOT_PASSWORD: 'forgot_password',
   };
+  
+  const [formState, setFormState] = useState(FORM_STATE.LOGIN);
+  
+  const handleFormChange = (newState) => {
+    setFormState(newState);
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const handleHidePassword = () => {
     setShowPassword(!showPassword)
@@ -43,6 +74,17 @@ function App() {
   const handleHidePasswordTwo = () => {
     setShowPasswordTwo(!showPasswordTwo);
   }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -68,43 +110,42 @@ function App() {
     const UsernameBorder = document.querySelector('.gatatu');
     const EmailBorder = document.querySelector('.kane');
 
+    async function registerUser() {
+
+      try {
+        const response = await fetch('http://localhost:5000/api/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json'},
+          body: JSON.stringify({ UserName, Email, password }),
+        });
     
-    fetch('http://localhost:5000/api/users', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ UserName, Email, password })
-    })
-
-
-    .then(response => response.json().then(data => {
-      if (response.ok) {
-        UsernameBorder.style.borderColor = '';
-        EmailBorder.style.borderColor = '';
-        alert('Success: User registered successfully');
-        console.log('Success:', data);
-        window.location.reload();
-      } else {
-        const errorMessage = data.message;
-        if (errorMessage.includes("UserName")) {
-          alert("Username already exists")
-          UsernameBorder.style.borderColor = 'red';
-        }
-        else if (errorMessage.includes("Email")) {
-          alert("Email already exists")
+        const data = await response.json();
+    
+        if (response.ok) {
           UsernameBorder.style.borderColor = '';
-          EmailBorder.style.borderColor = 'red';
+          EmailBorder.style.borderColor = '';
+          alert('Success: User registered successfully');
+          console.log('Success:', data);
+          window.location.reload();
+        } else {
+          const errorMessage = data.message;
+          if (errorMessage.includes("UserName")) {
+            alert("Username already exists");
+            UsernameBorder.style.borderColor = 'red';
+          } else if (errorMessage.includes("Email")) {
+            alert("Email already exists");
+            UsernameBorder.style.borderColor = '';
+            EmailBorder.style.borderColor = 'red';
+          }
+          console.error(errorMessage);
         }
-        console.error(errorMessage);
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error: Something went wrong. Please try again.');
       }
-    }))
-
-
-    .catch((error) => {
-      console.error('Error:', error);
-      alert('Error: Something went wrong. Please try again.');
-    });  
+    }
+    registerUser();
+ 
   }
 
   
@@ -130,31 +171,62 @@ function App() {
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-
-  
-    fetch('http://localhost:5000/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ identifier: loginIdentifier, password: loginPassword })
-    })
-    .then(response => response.json().then(data => {
-      if (response.ok) {
-        alert('Success: Login successful');
-        console.log('Success:', data);
-        //window.location.reload();
-      } else {
-        alert(`Error: ${data.message}`);
-        console.error('Login failed:', data.message);
+    async function loginUser() {
+      try {
+        const response = await fetch('http://localhost:5000/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ identifier: loginIdentifier, password: loginPassword }),
+        });
+    
+        const data = await response.json();
+    
+        if (response.ok) {
+          alert('Success: Login successful');
+          console.log('Success:', data);
+          window.location.reload();
+        } else {
+          alert(`Error: ${data.message}`);
+          console.error('Login failed:', data.message);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error: Something went wrong. Please try again.');
       }
-    }))
-    .catch((error) => {
-      console.error('Error:', error);
-      alert('Error: Something went wrong. Please try again.');
-    });
+    }
+    loginUser();
+    
+
   };
   
+  const handleForgotSubmit = (e) => {
+    e.preventDefault();
+
+    async function forgotPassword() {
+      try {
+        const response = await fetch('http://localhost:5000/api/forgot', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ Email: loginIdentifier }),
+        });
+    
+        const data = await response.json();
+    
+        if (response.ok) {
+          alert('Link sent successfully!!');
+          console.log('Success:', data);
+          window.location.reload();
+        } else {
+          alert(`Error: ${data.message}`);
+          console.error('Sending failed:', data.message);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error: Something went wrong. Please try again.');
+      }
+    }
+    forgotPassword();
+  };
 
 
 
@@ -203,6 +275,8 @@ function App() {
       </div>
     </form>
   );
+
+
 
   const SignUpForm = (
     <form className='Sign-up-form' onSubmit={handleSignUpSubmit}>
@@ -271,23 +345,54 @@ function App() {
 
 
 
+  const ForgotPasswordForm = (
+    <form action="" className='login_form' onSubmit={handleForgotSubmit}>
+      <div className='one'>
+        <p className='indicator'>Email</p>
+        <div className='input_container'>
+          <input type="text" 
+            placeholder='Enter your email to receive a verification link' 
+            name='Email'
+            value={loginIdentifier}
+            onChange={(e) => setLoginIdentifier(e.target.value)}
+            maxLength={25}
+            required
+          />
+        </div>
+      </div>
+      <div className='three'>
+        <button className='account_button' type='submit'>Send link</button>
+      </div>
+    </form>
+  );
+
+
 
   return (
     <div className="App">
       <div className='Form-container'>
         <div className='upper_part'>
-          <h1 className='upper_part'>{isLogin ? 'Login' : 'Sign up'}</h1>
+          <h1 className='upper_part'>
+            {formState === FORM_STATE.LOGIN && 'Login'}
+            {formState === FORM_STATE.SIGNUP && 'Sign up'}
+            {formState === FORM_STATE.FORGOT_PASSWORD && 'Forgot Password'}
+          </h1>
         </div>
-        {isLogin ? LoginForm : SignUpForm}
+        
         <div className='lower_part'>
+          {formState === FORM_STATE.LOGIN && LoginForm}
+          {formState === FORM_STATE.SIGNUP && SignUpForm}
+          {formState === FORM_STATE.FORGOT_PASSWORD && ForgotPasswordForm}
           <p>
-            {isLogin ? 
+            {formState === FORM_STATE.LOGIN ? 
             ( <> 
-                <p>Forgot &nbsp; <a href="">Email / Password </a>?</p>
-                <p>Don't have an account? &nbsp;<a href="#" onClick={handleFormChange}>Sign up</a></p>              
+                <p>Forgot &nbsp; <a href="" onClick={() => handleFormChange(FORM_STATE.FORGOT_PASSWORD)}> Password </a>?</p>
+                <p>Don't have an account? &nbsp;<a href="#" onClick={() => handleFormChange(FORM_STATE.SIGNUP)}>Sign up</a></p>              
               </>
-            ) : 
-            (<p>Already have an account? &nbsp; <a href="#" onClick={handleFormChange}>Sign in</a></p>)
+            ) : formState === FORM_STATE.SIGNUP ?
+            (<p>Already have an account? &nbsp; <a href="#" onClick={() => handleFormChange(FORM_STATE.LOGIN)}>Sign in</a></p>)
+              : 
+             (<p>Remember your password? &nbsp; <a href="#" onClick={() => handleFormChange(FORM_STATE.LOGIN)}>Sign in</a></p>)
             }
           </p>
         </div>

@@ -140,7 +140,7 @@ app.post('/api/forgot', async (req, res) => {
         html: `<p>Click the following link to reset your password: <a href="${verificationLink}">${verificationLink}</a></p>`
       };
       await sgMail.send(msg);
-      res.status(200).json({ message: 'Verification link sent to your email.' });
+      res.status(200).json({ message: 'Reset password link was sent to your email.' });
     } else {
       res.status(404).json({ message: 'Email was not found in our database.' });
     }

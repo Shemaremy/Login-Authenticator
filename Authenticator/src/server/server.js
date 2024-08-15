@@ -10,6 +10,8 @@ const sgMail = require('@sendgrid/mail');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
+const jwt = require('jsonwebtoken');
+
 const app = express();
 const PORT = 5000;
 
@@ -130,14 +132,19 @@ app.post('/api/forgot', async (req, res) => {
     const user = await User.findOne({ Email });
     
     if (user) {
-      // Generate a verification link (this is a placeholder; you should implement actual link generation)
-      const verificationLink = `http://your-frontend-url/reset-password?token=someUniqueTokenFor${Email}`;
+      
+      const token = jwt.sign(
+        { Email: user.Email },
+        process.env.JWT_SECRET,
+        { expiresIn: '5m' }
+      );
+      const resetLink = `http://localhost:5173/reset-password?token=${token}`;
 
       const msg = {
         to: Email,
         from: 'remyshema20@gmail.com',
         subject: 'Password Reset Request',
-        html: `<p>Click the following link to reset your password: <a href="${verificationLink}">${verificationLink}</a></p>`
+        html: `<p>Click the following link to reset your password: <a href="${resetLink}">${resetLink}</a></p>`
       };
       await sgMail.send(msg);
       res.status(200).json({ message: 'Reset password link was sent to your email.' });
@@ -149,6 +156,39 @@ app.post('/api/forgot', async (req, res) => {
     res.status(500).json({ message: 'Server error. Please try again later.' });
   }
 });
+
+
+
+// RESET PASSWORD ROUTE
+app.post('/api/reset-password', async (req, res) => {
+  const { token, passwordTwo } = req.body;
+
+  try {
+    // Verify the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const { Email } = decoded;
+
+    // Find the user by email
+    const user = await User.findOne({ Email });
+    if (!user) {
+      return res.status(404).json({ message: 'Invalid token or user not found.' });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(passwordTwo, saltRounds);
+
+    // Update the user's password
+    user.password = hashedPassword;
+    await user.save();
+
+    res.status(200).json({ message: 'Password has been reset successfully.' });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(400).json({ message: 'Invalid or expired token.' });
+  }
+});
+
+
 
 
 

@@ -1,4 +1,4 @@
-import {React, useState} from 'react'
+import {React, useState, useEffect} from 'react'
 import './App.css'
 
 function App() {
@@ -25,6 +25,14 @@ function App() {
 
 
 
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+
+    if (token) {
+      setFormState(FORM_STATE.RESET_PASSWORD);
+    }
+  }, []);
 
 
 
@@ -40,6 +48,7 @@ function App() {
     LOGIN: 'login',
     SIGNUP: 'signup',
     FORGOT_PASSWORD: 'forgot_password',
+    RESET_PASSWORD: 'reset_password',
   };
   
   const [formState, setFormState] = useState(FORM_STATE.LOGIN);
@@ -236,6 +245,62 @@ function App() {
 
 
 
+  const handleFinalReset = async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+  
+    if (token) {
+      setFormState(FORM_STATE.RESET_PASSWORD);
+      try {
+        const response = await fetch('http://localhost:5000/api/reset-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token, passwordTwo }),
+        });
+    
+        const data = await response.json();
+        if (response.ok) {
+          alert('Password has been reset successfully');
+          window.close();
+        } else {
+          alert(`Error: ${data.message}`);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error: Something went wrong. Please try again.');
+      }
+    }
+    else {
+      alert("Check the else in handleFinalReset")
+    }  
+  }
+
+  const handlePasswordReset = (e) => {
+    e.preventDefault();
+    const newErrors = validateForm();
+    const BorderOne = document.querySelector('.rimwe');
+    const BorderTwo = document.querySelector('.kabiri');
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+    } 
+    else {
+      // navigate('/');
+      // window.location.reload();
+      setErrors({});
+      BorderOne.style.borderColor = '';
+      BorderTwo.style.borderColor = '';
+      handleFinalReset();  
+    }
+  };
+  
+
+
+
+
+
+
+
 
 
 
@@ -367,6 +432,47 @@ function App() {
   );
 
 
+  const ResetPasswordForm = (
+    <form className='Sign-up-form' onSubmit={handlePasswordReset}>
+      <div className='two-a'>
+        <p className='indicator'>Password</p>
+        <div className='input_container for-password rimwe'>
+          <input type={showPasswordOne ? "text" : "password"} 
+            placeholder='Enter password' 
+            name='FirstPassword'
+            maxLength={20}
+            value={password}
+            onChange={(e) => setPasswordOne(e.target.value)}
+            required
+          />
+          <div className='eye-container' type="button" onClick={handleHidePasswordOne}>
+            {showPasswordOne ? <i className="fa-regular fa-eye-slash"></i> : <i className="fa-regular fa-eye"></i>}
+          </div>
+        </div>
+      </div>
+      <div className='two-b'>
+        <p className='indicator'>Confirm Password</p>
+        <div className='input_container for-password kabiri'>
+          <input type={showPasswordTwo ? "text" : "password"} 
+            placeholder='Confirm password' 
+            name='ConfPassword'
+            maxLength={20}
+            value={passwordTwo}
+            onChange={(e) => setPasswordTwo(e.target.value)}
+            required
+          />
+          <div className='eye-container' type="button" onClick={handleHidePasswordTwo}>
+            {showPasswordTwo ? <i className="fa-regular fa-eye-slash"></i> : <i className="fa-regular fa-eye"></i>}
+          </div>
+        </div>
+        {errors.passwordTwo && <p className='error'>{errors.passwordTwo}</p>}
+      </div>
+      <div className='three'>
+        <button className='account_button' type='submit'>Reset password</button>
+      </div>
+    </form>
+  );
+
 
   return (
     <div className="App">
@@ -376,6 +482,7 @@ function App() {
             {formState === FORM_STATE.LOGIN && 'Login'}
             {formState === FORM_STATE.SIGNUP && 'Sign up'}
             {formState === FORM_STATE.FORGOT_PASSWORD && 'Forgot Password'}
+            {formState === FORM_STATE.RESET_PASSWORD && 'Password Reset'}
           </h1>
         </div>
         
@@ -383,6 +490,7 @@ function App() {
           {formState === FORM_STATE.LOGIN && LoginForm}
           {formState === FORM_STATE.SIGNUP && SignUpForm}
           {formState === FORM_STATE.FORGOT_PASSWORD && ForgotPasswordForm}
+          {formState === FORM_STATE.RESET_PASSWORD && ResetPasswordForm}
           <p>
             {formState === FORM_STATE.LOGIN ? 
             ( <> 
@@ -391,7 +499,9 @@ function App() {
               </>
             ) : formState === FORM_STATE.SIGNUP ?
             (<p>Already have an account? &nbsp; <a href="#" onClick={() => handleFormChange(FORM_STATE.LOGIN)}>Sign in</a></p>)
-              : 
+              : formState === FORM_STATE.RESET_PASSWORD ?
+             (<></>)
+             : 
              (<p>Remember your password? &nbsp; <a href="#" onClick={() => handleFormChange(FORM_STATE.LOGIN)}>Sign in</a></p>)
             }
           </p>

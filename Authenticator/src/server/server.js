@@ -7,7 +7,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 const sgMail = require('@sendgrid/mail'); 
 
-const bcrypt = require('bcrypt'); // For hashing and comparing passwords
+const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 const app = express();
@@ -21,6 +21,7 @@ app.use(express.json());
 
 
 
+// DB Connection
 async function connectDB() {
   try {
     await mongoose.connect('mongodb://localhost:27017/Test');
@@ -29,7 +30,6 @@ async function connectDB() {
     console.error('Connection error:', err);
   }
 }
-
 connectDB();
 
 
@@ -38,7 +38,7 @@ connectDB();
 
 
 
-
+// Schema definition
 const UserSchema = new mongoose.Schema({
   UserName: { type: String, unique: true, required: true },
   Email: { type: String, unique: true, required: true },

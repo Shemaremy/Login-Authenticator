@@ -264,6 +264,7 @@ function App() {
           window.close();
         } else {
           alert(`Error: ${data.message}`);
+          window.close();
         }
       } catch (error) {
         console.error('Error:', error);

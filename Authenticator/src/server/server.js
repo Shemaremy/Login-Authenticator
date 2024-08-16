@@ -136,7 +136,7 @@ app.post('/api/forgot', async (req, res) => {
       const token = jwt.sign(
         { Email: user.Email },
         process.env.JWT_SECRET,
-        { expiresIn: '5m' }
+        { expiresIn: '2m' }
       );
       const resetLink = `http://localhost:5173/reset-password?token=${token}`;
 
@@ -144,7 +144,13 @@ app.post('/api/forgot', async (req, res) => {
         to: Email,
         from: 'remyshema20@gmail.com',
         subject: 'Password Reset Request',
-        html: `<p>Click the following link to reset your password: <a href="${resetLink}">${resetLink}</a></p>`
+        html: `
+          <p>Hello,</p>
+          <p>You requested to reset your password. Please click the link below to reset it:</p>
+          <p><a href="${resetLink}">Reset your password</a></p>
+          <p>If you didn't request a password reset, please ignore this email.</p>
+          <p>Thank you!</p>
+        `
       };
       await sgMail.send(msg);
       res.status(200).json({ message: 'Reset password link was sent to your email.' });
@@ -164,8 +170,10 @@ app.post('/api/reset-password', async (req, res) => {
   const { token, passwordTwo } = req.body;
 
   try {
+    console.log('Received Token:', token);
     // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('Decoded Token Payload:', decoded);
     const { Email } = decoded;
 
     // Find the user by email
@@ -184,7 +192,7 @@ app.post('/api/reset-password', async (req, res) => {
     res.status(200).json({ message: 'Password has been reset successfully.' });
   } catch (error) {
     console.error('Error:', error);
-    res.status(400).json({ message: 'Invalid or expired token.' });
+    res.status(400).json({ message: 'Token has expired. Please request a new password reset link.' });    
   }
 });
 

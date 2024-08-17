@@ -1,5 +1,6 @@
 import {React, useState, useEffect} from 'react'
 import './App.css'
+import Dialog from './Dialogs/Dialog';
 
 function App() {
 
@@ -22,6 +23,9 @@ function App() {
 
   const [loginIdentifier, setLoginIdentifier] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
 
 
@@ -191,9 +195,10 @@ function App() {
         const data = await response.json();
     
         if (response.ok) {
-          alert('Success: Login successful');
+          setIsModalOpen(true);
+          //alert('Success: Login successful');
           console.log('Success:', data);
-          window.location.reload();
+          //window.location.reload();
         } else {
           alert(`Error: ${data.message}`);
           console.error('Login failed:', data.message);
@@ -508,6 +513,7 @@ function App() {
           </p>
         </div>
       </div>
+      {isModalOpen && <Dialog autoOpen={true} />}
     </div>
   )
 }

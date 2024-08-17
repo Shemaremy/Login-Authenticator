@@ -25,8 +25,10 @@ app.use(express.json());
 
 // DB Connection
 async function connectDB() {
+  // const localUri = 'mongodb://localhost:27017/Test';
+  const uri = 'mongodb+srv://RemyTest:mamito@testproject.qjbm0.mongodb.net/?retryWrites=true&w=majority&appName=TestProject'
   try {
-    await mongoose.connect('mongodb://localhost:27017/Test');
+    await mongoose.connect(uri);
     console.log('MongoDB connected');
   } catch (err) {
     console.error('Connection error:', err);
@@ -46,6 +48,7 @@ const UserSchema = new mongoose.Schema({
   Email: { type: String, unique: true, required: true },
   password: { type: String, required: true },
 });
+
 
 UserSchema.plugin(uniqueValidator);
 const User = mongoose.model('Users', UserSchema);

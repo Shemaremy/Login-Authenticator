@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "./Dialog.css";
 
-function Dialog({ autoOpen = false }) {
+function Dialog({ autoOpen = false, message = '' }) {
   const [modal, setModal] = useState(autoOpen);
 
   const toggleModal = () => {
     setModal(!modal);
-    window.location.reload();
+    if (message === "Password has been reset successfully!!") {
+      window.close();
+    } else {
+      window.location.reload();
+    }
   };
 
   useEffect(() => {
@@ -34,7 +38,7 @@ function Dialog({ autoOpen = false }) {
           <div onClick={toggleModal} className="overlay"></div>
           <div className="modal-content">
             <i className="fa-regular fa-circle-check"></i>
-            <h2 className="message-header">Login Successfull!</h2>
+            <h2 className="message-header">{message ? message : "Hello Modal"}</h2>
             <button className="close-modal" onClick={toggleModal}> OK </button>
           </div>
         </div>

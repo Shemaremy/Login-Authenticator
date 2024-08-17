@@ -24,7 +24,21 @@ function App() {
   const [loginIdentifier, setLoginIdentifier] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [autoOpenDialog, setAutoOpenDialog] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState('');
+
+  const [loading, setLoading] = useState(false);
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -65,7 +79,10 @@ function App() {
 
 
 
-
+  const showDialog = (message) => {
+    setDialogMessage(message);
+    setAutoOpenDialog(true);
+  };
 
 
 
@@ -119,9 +136,14 @@ function App() {
   };
 
 
+
+
+  
+
   const handleCreateUser = () => {
     const UsernameBorder = document.querySelector('.gatatu');
     const EmailBorder = document.querySelector('.kane');
+    setLoading(true);
 
     async function registerUser() {
 
@@ -133,13 +155,15 @@ function App() {
         });
     
         const data = await response.json();
+        setLoading(false);
     
         if (response.ok) {
           UsernameBorder.style.borderColor = '';
           EmailBorder.style.borderColor = '';
-          alert('Success: User registered successfully');
+          //alert('Success: User registered successfully');
           console.log('Success:', data);
-          window.location.reload();
+          //window.location.reload();
+          showDialog('Success: User registered successfully');
         } else {
           const errorMessage = data.message;
           if (errorMessage.includes("UserName")) {
@@ -160,8 +184,6 @@ function App() {
     registerUser();
  
   }
-
-  
   
   const handleSignUpSubmit = (e) => {
     e.preventDefault();
@@ -182,8 +204,13 @@ function App() {
   }
 
 
+
+
+
+
   const handleLoginSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
     async function loginUser() {
       try {
         const response = await fetch('http://localhost:5000/api/login', {
@@ -193,12 +220,11 @@ function App() {
         });
     
         const data = await response.json();
+        setLoading(false);
     
         if (response.ok) {
-          setIsModalOpen(true);
-          //alert('Success: Login successful');
+          showDialog('Login successfull!!');
           console.log('Success:', data);
-          //window.location.reload();
         } else {
           alert(`Error: ${data.message}`);
           console.error('Login failed:', data.message);
@@ -215,6 +241,7 @@ function App() {
   
   const handleForgotSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
 
     async function forgotPassword() {
       try {
@@ -225,11 +252,13 @@ function App() {
         });
     
         const data = await response.json();
+        setLoading(false);
     
         if (response.ok) {
-          alert('Link sent successfully!!');
+          showDialog('Link sent successfully! Check your inbox.');
+          //alert('Link sent successfully!!');
           console.log('Success:', data);
-          window.location.reload();
+          //window.location.reload();
         } else {
           alert(`Error: ${data.message}`);
           console.error('Sending failed:', data.message);
@@ -253,6 +282,7 @@ function App() {
   const handleFinalReset = async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
+    setLoading(true);
   
     if (token) {
       setFormState(FORM_STATE.RESET_PASSWORD);
@@ -264,9 +294,10 @@ function App() {
         });
     
         const data = await response.json();
+        setLoading(false);
+        
         if (response.ok) {
-          alert('Password has been reset successfully');
-          window.close();
+          showDialog('Password has been reset successfully!!');
         } else {
           alert(`Error: ${data.message}`);
           window.close();
@@ -342,7 +373,9 @@ function App() {
         </div>
       </div>
       <div className='three'>
-        <button className='account_button' type='submit'>Sign in</button>
+        <button className='account_button' type='submit'>
+          {loading ? <i className="fa-solid fa-spinner fa-spin"></i> : 'Sign in'}
+        </button>
       </div>
     </form>
   );
@@ -409,7 +442,9 @@ function App() {
         {errors.passwordTwo && <p className='error'>{errors.passwordTwo}</p>}
       </div>
       <div className='three'>
-        <button className='account_button' type='submit'>Sign up</button>
+        <button className='account_button' type='submit'>
+           {loading ? <i className="fa-solid fa-spinner fa-spin"></i> : 'Sign up'}
+        </button>
       </div>
     </form>
   );
@@ -432,7 +467,9 @@ function App() {
         </div>
       </div>
       <div className='three'>
-        <button className='account_button' type='submit'>Send link</button>
+        <button className='account_button' type='submit'>
+          {loading ? <i className="fa-solid fa-spinner fa-spin"></i> : 'Send link'}
+        </button>
       </div>
     </form>
   );
@@ -474,7 +511,9 @@ function App() {
         {errors.passwordTwo && <p className='error'>{errors.passwordTwo}</p>}
       </div>
       <div className='three'>
-        <button className='account_button' type='submit'>Reset password</button>
+        <button className='account_button' type='submit'>
+          {loading ? <i className="fa-solid fa-spinner fa-spin"></i> : 'Reset password'}
+        </button>
       </div>
     </form>
   );
@@ -513,7 +552,7 @@ function App() {
           </p>
         </div>
       </div>
-      {isModalOpen && <Dialog autoOpen={true} />}
+      <Dialog autoOpen={autoOpenDialog} message={dialogMessage} />
     </div>
   )
 }

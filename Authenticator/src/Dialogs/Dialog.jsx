@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./Dialog.css";
 
+
 function Dialog({ autoOpen = false, message = '' }) {
+
   const [modal, setModal] = useState(autoOpen);
+
+
 
   const toggleModal = () => {
     setModal(!modal);
@@ -13,12 +17,16 @@ function Dialog({ autoOpen = false, message = '' }) {
     }
   };
 
+
+
+
+  
   useEffect(() => {
     if (autoOpen) {
-      setModal(true); // Directly set modal to true if autoOpen is true
+      setModal(true); 
     }
   }, [autoOpen]);
-
+  
   useEffect(() => {
     if (modal) {
       document.body.classList.add('active-modal');

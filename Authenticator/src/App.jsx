@@ -43,6 +43,7 @@ function App() {
 
 
 
+  // Helps that when the token is loaded in the page, (in url params) then display the reset password form
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
@@ -62,13 +63,13 @@ function App() {
 
 
 
+// Switching forms section
   const FORM_STATE = {
     LOGIN: 'login',
     SIGNUP: 'signup',
     FORGOT_PASSWORD: 'forgot_password',
     RESET_PASSWORD: 'reset_password',
   };
-  
   const [formState, setFormState] = useState(FORM_STATE.LOGIN);
   
   const handleFormChange = (newState) => {
@@ -79,6 +80,7 @@ function App() {
 
 
 
+  // Dialog boxes for the message 
   const showDialog = (message) => {
     setDialogMessage(message);
     setAutoOpenDialog(true);
@@ -92,10 +94,11 @@ function App() {
 
 
 
+
+
   const handleHidePassword = () => {
     setShowPassword(!showPassword)
   }
-
 
   const handleHidePasswordOne = () => {
     setShowPasswordOne(!showPasswordOne);
@@ -119,6 +122,10 @@ function App() {
 
 
 
+
+
+
+  // Form vallidation method
   const validateForm = () => {
 
     const newErrors = {};
@@ -140,6 +147,9 @@ function App() {
 
   
 
+
+
+  // SIGN UP SECTION
   const handleCreateUser = () => {
     const UsernameBorder = document.querySelector('.gatatu');
     const EmailBorder = document.querySelector('.kane');
@@ -208,6 +218,7 @@ function App() {
 
 
 
+  // LOGIN SECTION
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -238,7 +249,12 @@ function App() {
     
 
   };
+
+
   
+
+
+  // FORGOT PASSWORD SECTION
   const handleForgotSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -275,10 +291,7 @@ function App() {
 
 
 
-
-
-
-
+  // RESET PASSWORD SECTION
   const handleFinalReset = async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
@@ -338,6 +351,7 @@ function App() {
 
 
 
+  // --------------------------------- FORMS SECTION ----------------------------------------------
 
 
 
@@ -519,6 +533,13 @@ function App() {
   );
 
 
+
+
+
+
+
+
+  
   return (
     <div className="App">
       <div className='Form-container'>
@@ -556,5 +577,6 @@ function App() {
     </div>
   )
 }
+
 
 export default App

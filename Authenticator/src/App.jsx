@@ -30,6 +30,18 @@ function App() {
 
   const [loading, setLoading] = useState(false);
 
+  
+  
+
+
+  // Fetch URLs
+  const GlitchUrl = 'https://test-login-authenticator.glitch.me/api';
+  
+  const signUpEndpoint = `${GlitchUrl}/users`;
+  const loginEndpoint = `${GlitchUrl}/login`;
+  const forgotEndpoint = `${GlitchUrl}/forgot`;
+  const resetEndpoint = `${GlitchUrl}/reset-password`;
+
 
 
 
@@ -133,7 +145,6 @@ function App() {
 
     const BorderOne = document.querySelector('.rimwe');
     const BorderTwo = document.querySelector('.kabiri');
-    const EmailBorder = document.querySelector('.kane');
 
     if(password !== passwordTwo) {
       newErrors.passwordTwo = 'Your passwords must match sir!';
@@ -141,19 +152,16 @@ function App() {
       BorderTwo.style.borderColor = 'red';
     }
 
-    if (password.length < 8) {
+    if (password.length <= 8) {
       newErrors.password = 'Password must be at least 8 characters!';
       newErrors.passwordTwo = 'Password must be at least 8 characters!';
       BorderOne.style.borderColor = 'red';
       BorderTwo.style.borderColor = 'red';
     }
+  
     
-    if (!validateEmail(Email)) {
-      newErrors.Email = 'Email is invalid';
-      EmailBorder.style.borderColor = 'red';
-    } else {
-      EmailBorder.style.borderColor = '';
-    }
+    
+    
 
     return newErrors;
   };
@@ -174,7 +182,7 @@ function App() {
     async function registerUser() {
 
       try {
-        const response = await fetch('http://localhost:5000/api/users', {
+        const response = await fetch(signUpEndpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json'},
           body: JSON.stringify({ UserName, Email, password }),
@@ -218,7 +226,15 @@ function App() {
     const BorderTwo = document.querySelector('.kabiri');
     const EmailBorder = document.querySelector('.kane');
     if (Object.keys(newErrors).length > 0) {
-        setErrors(newErrors);
+      setErrors(newErrors);
+      
+      //Email validation
+      if (!validateEmail(Email)) {
+        newErrors.Email = 'Email is invalid';
+        EmailBorder.style.borderColor = 'red';
+      } else {
+        EmailBorder.style.borderColor = '';
+      }
     } 
     else {
       // navigate('/');
@@ -233,6 +249,7 @@ function App() {
 
 
 
+  // Validate email
   const validateEmail = (email) => {
     return validator.validate(email);
   };
@@ -248,7 +265,7 @@ function App() {
     setLoading(true);
     async function loginUser() {
       try {
-        const response = await fetch('http://localhost:5000/api/login', {
+        const response = await fetch(loginEndpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ identifier: loginIdentifier, password: loginPassword }),
@@ -285,7 +302,7 @@ function App() {
 
     async function forgotPassword() {
       try {
-        const response = await fetch('http://localhost:5000/api/forgot', {
+        const response = await fetch(forgotEndpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ Email: loginIdentifier }),
@@ -323,8 +340,9 @@ function App() {
   
     if (token) {
       setFormState(FORM_STATE.RESET_PASSWORD);
+
       try {
-        const response = await fetch('http://localhost:5000/api/reset-password', {
+        const response = await fetch(resetEndpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ token, passwordTwo }),
@@ -495,7 +513,7 @@ function App() {
     <form action="" className='login_form' onSubmit={handleForgotSubmit}>
       <div className='one'>
         <p className='indicator'>Email</p>
-        <div className='input_container'>
+        <div className='input_container kane'>
           <input type="text" 
             placeholder='Enter your email to receive a verification link' 
             name='Email'
@@ -520,7 +538,8 @@ function App() {
       <div className='two-a'>
         <p className='indicator'>Password</p>
         <div className='input_container for-password rimwe'>
-          <input type={showPasswordOne ? "text" : "password"} 
+          <input 
+            type={showPasswordOne ? "text" : "password"} 
             placeholder='Enter password' 
             name='FirstPassword'
             maxLength={20}
@@ -532,6 +551,7 @@ function App() {
             {showPasswordOne ? <i className="fa-regular fa-eye-slash"></i> : <i className="fa-regular fa-eye"></i>}
           </div>
         </div>
+        {errors.password && <p className='error'>{errors.password}</p>}
       </div>
       <div className='two-b'>
         <p className='indicator'>Confirm Password</p>

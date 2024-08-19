@@ -4,16 +4,17 @@ Sign ups and Log in authenticator with MongoDB
 
 
 
+# Dependencies used :
 
-# For the Local server, install these:
+- dotenv: Loads environment variables from the .env
+- express: A web framework for building the server.
+- mongoose: A MongoDB object modeling tool designed to work in an asynchronous environment.
+- cors: Middleware for enabling Cross-Origin Resource Sharing.
+- mongoose-unique-validator: Adds pre-save validation for unique fields within a Mongoose schema.
+- bcrypt: Library for hashing passwords.
+- jsonwebtoken: For generating and verifying JWT tokens.
+- @sendgrid/mail: Used for sending emails via SendGrid.
 
-- npm init -y
-
-- npm install express mongoose body-parser cors
-
-- npm install bcrypt mongoose express body-parser cors
-
-- npm install --save mongoose-unique-validator
 
 
 

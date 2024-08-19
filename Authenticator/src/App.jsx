@@ -1,6 +1,7 @@
 import {React, useState, useEffect} from 'react'
 import './App.css'
 import Dialog from './Dialogs/Dialog';
+import * as validator from 'email-validator';
 
 function App() {
 
@@ -132,11 +133,26 @@ function App() {
 
     const BorderOne = document.querySelector('.rimwe');
     const BorderTwo = document.querySelector('.kabiri');
+    const EmailBorder = document.querySelector('.kane');
 
     if(password !== passwordTwo) {
       newErrors.passwordTwo = 'Your passwords must match sir!';
       BorderOne.style.borderColor = 'red';
       BorderTwo.style.borderColor = 'red';
+    }
+
+    if (password.length < 8) {
+      newErrors.password = 'Password must be at least 8 characters!';
+      newErrors.passwordTwo = 'Password must be at least 8 characters!';
+      BorderOne.style.borderColor = 'red';
+      BorderTwo.style.borderColor = 'red';
+    }
+    
+    if (!validateEmail(Email)) {
+      newErrors.Email = 'Email is invalid';
+      EmailBorder.style.borderColor = 'red';
+    } else {
+      EmailBorder.style.borderColor = '';
     }
 
     return newErrors;
@@ -200,6 +216,7 @@ function App() {
     const newErrors = validateForm();
     const BorderOne = document.querySelector('.rimwe');
     const BorderTwo = document.querySelector('.kabiri');
+    const EmailBorder = document.querySelector('.kane');
     if (Object.keys(newErrors).length > 0) {
         setErrors(newErrors);
     } 
@@ -209,10 +226,17 @@ function App() {
       setErrors({});
       BorderOne.style.borderColor = '';
       BorderTwo.style.borderColor = '';
+      EmailBorder.style.borderColor = '';
       handleCreateUser();  
     }
   }
 
+
+
+  const validateEmail = (email) => {
+    return validator.validate(email);
+  };
+  
 
 
 
@@ -421,6 +445,7 @@ function App() {
             required
           />
         </div>
+        {errors.Email && <p className='error'>{errors.Email}</p>}
       </div>
       <div className='two-a'>
         <p className='indicator'>Password</p>
@@ -437,6 +462,7 @@ function App() {
             {showPasswordOne ? <i className="fa-regular fa-eye-slash"></i> : <i className="fa-regular fa-eye"></i>}
           </div>
         </div>
+        {errors.password && <p className='error'>{errors.password}</p>}
       </div>
       <div className='two-b'>
         <p className='indicator'>Confirm Password</p>

@@ -16,7 +16,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: green;
 }
 
 .Form-container {
@@ -33,6 +32,7 @@ body {
   border-color: rgba(128, 128, 128, 0.349);
   padding-top: 100px;
   padding-bottom: 100px;
+  margin-bottom: 100px;
   padding: 0;
   transition: padding 0.3s ease-in-out;
 }

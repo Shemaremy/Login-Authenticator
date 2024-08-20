@@ -232,6 +232,7 @@ body {
 /*------------------------------- My Phone -----------------------------------*/
 
 @media (max-width: 768px) {
+  body
   .Form-container {
     width: 98%;
     border-width: 0;

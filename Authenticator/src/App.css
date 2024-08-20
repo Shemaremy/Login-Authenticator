@@ -2,12 +2,17 @@ body {
   margin: 0;
   height: 100vh;
   width: 100vw;
+  height: auto;
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 #root {
   width: 100%;
   height: 100%;
+  padding-top: 20px;
+  align-content: center;
+  margin: 0 auto;
 }
 
 .App {
@@ -32,7 +37,6 @@ body {
   border-color: rgba(128, 128, 128, 0.349);
   padding-top: 100px;
   padding-bottom: 100px;
-  margin-bottom: 100px;
   padding: 0;
   transition: padding 0.3s ease-in-out;
 }

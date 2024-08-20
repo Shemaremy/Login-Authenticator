@@ -239,7 +239,7 @@ body {
   }
 
   .upper_part {
-    height: 100px;
+    height: auto;
     color: gray;
   }
 
@@ -268,7 +268,7 @@ body {
 
 
 
-@media (max-width: 1220px) {
+@media (min-width: 769px) and (max-width: 1220px) {
   .Form-container {
     width: 90%;
     border-width: 1;

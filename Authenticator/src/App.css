@@ -241,6 +241,7 @@ body {
   .upper_part {
     height: auto;
     color: rgb(59, 59, 59);
+    font-size: 1.3rem;
   }
 
   .indicator {

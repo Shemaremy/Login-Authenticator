@@ -3,7 +3,6 @@ Sign ups and Log in authenticator with MongoDB
 
 
 
-
 # Dependencies used :
 
 - dotenv: Loads environment variables from the .env

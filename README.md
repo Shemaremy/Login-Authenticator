@@ -1,5 +1,5 @@
 # Login-Authenticator
-Sign ups and Log in authenticator with MongoDB
+Sign up and Log in authenticator with MERN
 
 
 
